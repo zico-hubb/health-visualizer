@@ -203,6 +203,41 @@ def map_data():
     except Exception as e:
         print("Error generating map data:", e)
         return jsonify({"error": str(e)}), 500
+    # --------------------------------------------
+# 🟢 Route: Comparison Dashboard Data
+# --------------------------------------------
+@app.route("/compare", methods=["GET", "POST"])
+def compare_data():
+    """
+    Returns infection data grouped by county.
+    Optionally filter by selected counties (POST request).
+    """
+    try:
+        # Replace with your real data path
+        file_path = "uploads/kenya_infection_data_2025.xlsx"
+        df = pd.read_excel(file_path)
+
+        # Ensure expected columns
+        if not {"county", "number_of_infected"}.issubset(df.columns):
+            return jsonify({"error": "Missing required columns"}), 400
+
+        # Average infection counts per county
+        summary = df.groupby("county")["number_of_infected"].mean().reset_index()
+
+        if request.method == "POST":
+            data = request.get_json()
+            selected = data.get("counties", [])
+            if selected:
+                summary = summary[summary["county"].isin(selected)]
+
+        response = summary.to_dict(orient="records")
+        return jsonify({"data": response})
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
     
 if __name__ == "__main__":
     app.run(debug=True)

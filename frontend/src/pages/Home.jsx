@@ -17,7 +17,7 @@ const Home = () => {
   const [yCol, setYCol] = useState("");
   const [loading, setLoading] = useState(false);
   const [forecastLoading, setForecastLoading] = useState(false);
-  const [forecastMode, setForecastMode] = useState("short"); // 🔁 new toggle
+  const [forecastMode, setForecastMode] = useState("short");
 
   const navigate = useNavigate();
 
@@ -53,7 +53,6 @@ const Home = () => {
     }
   };
 
-  // 🔮 Generate forecast with mode
   const handleGenerateForecast = async () => {
     if (!filePath || !yCol) return alert("Generate a chart first!");
     setForecastLoading(true);
@@ -82,23 +81,38 @@ const Home = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Health Data Visualizer & AI Forecast</h1>
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1 style={{ color: "#004aad" }}>Health Data Visualizer & AI Forecast</h1>
 
-      <button
-        onClick={() => navigate("/map")}
-        style={{
-          backgroundColor: "#007bff",
-          color: "white",
-          border: "none",
-          padding: "10px 15px",
-          borderRadius: "5px",
-          marginBottom: "15px",
-          cursor: "pointer",
-        }}
-      >
-        View Geospatial Map
-      </button>
+      <div style={{ display: "flex", gap: "15px", marginBottom: "20px" }}>
+        <button
+          onClick={() => navigate("/map")}
+          style={{
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            padding: "10px 15px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          🌍 View Geospatial Map
+        </button>
+
+        <button
+          onClick={() => navigate("/dashboardview")}
+          style={{
+            backgroundColor: "#17a2b8",
+            color: "white",
+            border: "none",
+            padding: "10px 15px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          📊 Open Interactive Dashboard
+        </button>
+      </div>
 
       {loading && <p>Loading...</p>}
       <UploadFile onUpload={handleUpload} />
@@ -110,7 +124,6 @@ const Home = () => {
 
       {chartData && (
         <>
-          {/* 🔁 Forecast Mode Toggle */}
           <div style={{ marginTop: "15px" }}>
             <label style={{ marginRight: "10px" }}>Forecast Mode:</label>
             <select
@@ -135,7 +148,7 @@ const Home = () => {
               color: "white",
               border: "none",
               padding: "10px 15px",
-              borderRadius: "5px",
+              borderRadius: "6px",
               marginTop: "15px",
               cursor: forecastLoading ? "not-allowed" : "pointer",
             }}
